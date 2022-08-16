@@ -143,7 +143,7 @@ class TableRecognizer:
 
                 xmin, ymin, xmax, ymax = list(map(int, results["boxes"][idx]))
 
-                print("hee")
+                #print("hee")
 
                 cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
             results["debug_image"] = image
@@ -152,7 +152,7 @@ class TableRecognizer:
 
 
 def main():
-    m = TableRecognizer("./output/model_8.pth")
+    m = TableRecognizer("./output/pubtables1m_structure_detr_r18.pth")
     import glob
     from tqdm import tqdm
 

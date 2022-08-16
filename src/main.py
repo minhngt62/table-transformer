@@ -63,6 +63,7 @@ def get_args():
         help="Toggle between different modes",
     )
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument('--test_max_size', type=int)
 
     return parser.parse_args()
 
@@ -213,6 +214,7 @@ def get_data(args):
             os.path.join(args.data_root_dir, "test"),
             get_transform(args.data_type, "val"),
             do_crop=False,
+            max_size=args.test_max_size,
             make_coco=True,
             image_extension=".jpg",
             xml_fileset="test_filelist.txt",
