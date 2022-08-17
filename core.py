@@ -1,6 +1,7 @@
 """
 Copyright (C) 2021 Microsoft Corporation
 """
+from cProfile import label
 import os
 from datetime import datetime
 import sys
@@ -12,14 +13,16 @@ import torchvision.transforms.functional as F
 import cv2
 from PIL import Image
 import streamlit as st
+from pathlib import Path
 
 # fuck this line :)
 # reason
 # File "/home/research/table-transformer/detr/engine.py", line 12, in <module>
 #     import util.misc as utils
 #     ModuleNotFoundError: No module named 'util'
-sys.path.append("detr")
-sys.path.append("src")
+pwd = Path(__file__).parent.resolve()
+sys.path.append(os.path.join(pwd, "detr"))
+sys.path.append(os.path.join(pwd, "src"))
 
 from engine import evaluate, train_one_epoch
 from models import build_model
@@ -87,7 +90,7 @@ def load_json(json_path):
 class TableRecognizer:
     def __init__(self, checkpoint_path):
         # args = Args
-        args = load_json("./src/structure_config.json")
+        args = load_json(os.path.join(pwd, "src/structure_config.json"))
         args = type("Args", (object,), args)
 
         assert os.path.exists(checkpoint_path), checkpoint_path
@@ -140,12 +143,9 @@ class TableRecognizer:
             for idx, score in enumerate(results["scores"].tolist()):
                 if score < thresh:
                     continue
-
-                xmin, ymin, xmax, ymax = list(map(int, results["boxes"][idx]))
-
-                #print("hee")
-
-                cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
+                if results["labels"][idx] not in [0, 6]:
+                    xmin, ymin, xmax, ymax = list(map(int, results["boxes"][idx]))
+                    cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
             results["debug_image"] = image
 
         return results
