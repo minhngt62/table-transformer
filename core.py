@@ -136,7 +136,7 @@ class TableRecognizer:
             self.device
         )
         results = self.postprocessors["bbox"](outputs, image_size)[0]
-        print(results)
+        #print(results)
 
         if debug is True:
             image = np.array(image)
