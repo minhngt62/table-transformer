@@ -88,9 +88,9 @@ def load_json(json_path):
 
 # def main():
 class TableRecognizer:
-    def __init__(self, checkpoint_path):
+    def __init__(self, checkpoint_path, config_type="structure"):
         # args = Args
-        args = load_json(os.path.join(pwd, "src/structure_config.json"))
+        args = load_json(os.path.join(pwd, f"src/{config_type}_config.json"))
         args = type("Args", (object,), args)
 
         assert os.path.exists(checkpoint_path), checkpoint_path
